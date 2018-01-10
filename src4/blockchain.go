@@ -11,7 +11,7 @@ import(
 	"errors"
 )
 
-const dbFile="blockchain7.db"	
+const dbFile="blockchain.db"	
 const blocksBucket="blocks"
 const genesisCoinbaseData="The Times 8/Jan/2018"
 
