@@ -11,6 +11,7 @@ import(
 	"encoding/hex"
 	"fmt"
 	"log"
+	"strings"
 )
 
 const subsidy=10
@@ -95,6 +96,12 @@ func (tx *Transaction) Verify(prevTXs map[string]Transaction)bool{
 		return true
 	}
 
+	for _,vin:=range tx.Vin{
+		if prevTXs[hex.EncodeToString(vin.Txid)].ID==nil{
+			log.Panic("ERROR: previous transaction is not correct")
+		}
+	}
+
 	txCopy:=tx.TrimmedCopy()
 	curve:=elliptic.P256()
 
@@ -121,7 +128,7 @@ func (tx *Transaction) Verify(prevTXs map[string]Transaction)bool{
 		if ecdsa.Verify(&rawPubKey,txCopy.ID,&r,&s)==false{
 			return false
 		}
-
+		txCopy.Vin[inID].PubKey=nil
 	}
 	return true
 }
@@ -200,4 +207,27 @@ func NewUTXOTransaction(wallet *Wallet,to string,amount int,UTXOSet *UTXOSet) *T
 	UTXOSet.Blockchain.SignTransaction(&tx,wallet.PrivateKey)	
 
 	return &tx
+}
+
+//String returns a human-readable representation of a transaction
+func (tx Transaction) String() string{
+	var lines []string
+
+	lines=append(lines,fmt.Sprintf("\n---------- Transaction %x ----------",tx.ID))
+
+	for i,input:=range tx.Vin{
+		lines=append(lines,fmt.Sprintf("-Input %d:",i))
+		lines=append(lines,fmt.Sprintf("  TXID:		%x",input.Txid))
+		lines=append(lines,fmt.Sprintf("  Out:		%d",input.Vout))
+		lines=append(lines,fmt.Sprintf("  Signature:		%x",input.Signature))
+		lines=append(lines,fmt.Sprintf("  PubKey:	%x",input.PubKey))
+	}
+
+	for i,output:=range tx.Vout{
+		lines=append(lines,fmt.Sprintf("-Output:%d",i))
+		lines=append(lines,fmt.Sprintf("  Value:	%d",output.Value))
+		lines=append(lines,fmt.Sprintf("  Script:	%x",output.PubKeyHash))
+	}
+
+	return strings.Join(lines,"\n")
 }

@@ -11,7 +11,7 @@ import(
 	"fmt"
 )
 
-const version=byte(0x00)
+const walletversion=byte(0x00)
 const addressChecksumLen=4
 
 type Wallet struct{
@@ -29,7 +29,7 @@ func NewWallet() *Wallet{
 func (w Wallet) GetAddress() []byte{
 	pubKeyHash:=HashPubKey(w.PublicKey)
 
-	versionedPayload:=append([]byte{version},pubKeyHash...)
+	versionedPayload:=append([]byte{walletversion},pubKeyHash...)
 	checksum:=checksum(versionedPayload)
 
 	fullPayload:=append(versionedPayload,checksum...)
@@ -59,10 +59,10 @@ func ValidateAddress(address string) bool{
 	//fmt.Printf("%x\n",pubKeyHash)
 	actualChecksum:=pubKeyHash[len(pubKeyHash)-addressChecksumLen:]
 	//fmt.Printf("actual=%x\n",actualChecksum)
-	version:=pubKeyHash[0]
+	//version:=pubKeyHash[0]
 	pubKeyHash=pubKeyHash[1:len(pubKeyHash)-addressChecksumLen]
 	//fmt.Printf("pubKeyHash=%x\n",pubKeyHash)
-	targetChecksum:=checksum(append([]byte{version},pubKeyHash...))
+	targetChecksum:=checksum(append([]byte{walletversion},pubKeyHash...))
 	//fmt.Printf("target=%x\n",targetChecksum)
 
 	return bytes.Compare(actualChecksum,targetChecksum)==0

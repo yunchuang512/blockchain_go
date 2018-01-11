@@ -21,7 +21,7 @@ func NewWallets(nodeID string) (*Wallets,error){
 	wallets:=Wallets{}
 	wallets.Wallets=make(map[string]*Wallet)
 
-	err:=wallets.LoadFromFile("1")
+	err:=wallets.LoadFromFile(nodeID)
 
 	return &wallets,err
 }

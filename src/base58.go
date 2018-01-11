@@ -39,9 +39,11 @@ func Base58Decode(input []byte) []byte {
 	result := big.NewInt(0)
 	zeroBytes := 0
 
-	for _, b := range input {
-		if b == 0x31{
+	for _,b := range input {
+		if b == 0x31 {
 			zeroBytes++
+		}else{
+			break
 		}
 	}
 

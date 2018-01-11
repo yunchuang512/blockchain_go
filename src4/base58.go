@@ -40,7 +40,7 @@ func Base58Decode(input []byte) []byte {
 	zeroBytes := 0
 
 	for _, b := range input {
-		if b == 0x31	 {
+		if b == 0x31{
 			zeroBytes++
 		}
 	}
