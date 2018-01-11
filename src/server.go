@@ -453,6 +453,7 @@ func handleTx(request []byte,bc *Blockchain){
 					if bc.VerifyTransaction(&tx)==true{
 						txs=append(txs,&tx)
 					}
+					delete(mempool,id)
 				}
 
 				if len(txs)==0{
@@ -467,10 +468,10 @@ func handleTx(request []byte,bc *Blockchain){
 				UTXOSet:=UTXOSet{bc}
 				UTXOSet.Reindex()
 
-				for _,tx:=range txs{
+				/*for _,tx:=range txs{
 					txID:=hex.EncodeToString(tx.ID)
 					delete(mempool,txID)
-				}
+				}*/
 
 				for _,node:=range knownNodes{
 					if node!=nodeAddress{

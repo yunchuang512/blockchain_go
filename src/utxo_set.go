@@ -119,7 +119,7 @@ func (u UTXOSet) Update(block *Block){
 		b:=tx.Bucket([]byte(utxoBucket))
 
 		for _,tx:=range block.Transactions{
-			if tx.IsCoinBase()==false{
+			if tx.IsCoinbase()==false{
 				for _,vin:=range tx.Vin{
 					updateOuts:=TXOutputs{}
 					outsBytes:=b.Get(vin.Txid)

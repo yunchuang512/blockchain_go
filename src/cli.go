@@ -124,7 +124,7 @@ func (cli *CLI)Run(){
 	}
 
 	if printChainCmd.Parsed(){
-		cli.printChain()
+		cli.printChain(nodeID)
 	}
 
 	if createWalletCmd.Parsed(){

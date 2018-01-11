@@ -193,7 +193,7 @@ func (bc *Blockchain) SignTransaction(tx *Transaction,privKey ecdsa.PrivateKey){
 
 //VerifyTransaction verifies transaction input signatures
 func (bc *Blockchain) VerifyTransaction(tx *Transaction) bool{
-	if tx.IsCoinBase(){
+	if tx.IsCoinbase(){
 		return true
 	}
 
@@ -240,7 +240,7 @@ func (bc *Blockchain) FindUTXO() map[string]TXOutputs{
 				UTXO[txID]=outs			
 			}
 
-			if tx.IsCoinBase()==false{
+			if tx.IsCoinbase()==false{
 				for _,in:=range tx.Vin{
 					inTxID:=hex.EncodeToString(in.Txid)
 					spentTXOs[inTxID]=append(spentTXOs[inTxID],in.Vout)
